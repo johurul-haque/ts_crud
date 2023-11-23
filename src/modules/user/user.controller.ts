@@ -6,7 +6,6 @@ import * as services from './user.service';
 export async function createUser(req: Request, res: Response) {
   try {
     const user = userSchema.parse(req.body);
-
     const data = await services.create(user);
 
     res.status(200).json({
@@ -15,16 +14,17 @@ export async function createUser(req: Request, res: Response) {
       data,
     });
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(409).json({
-        success: false,
-        message: error.message,
-      });
-    } else if (error instanceof z.ZodError) {
+    if (error instanceof z.ZodError) {
       res.status(422).json({
         success: false,
-        message: error.message,
+        message: JSON.parse(error.message),
         error: error.issues,
+      });
+    } else if (error instanceof Error) {
+      res.status(409).json({
+        success: false,
+        message: 'User already exists',
+        error: error.message,
       });
     } else {
       res.status(500).json({
@@ -64,8 +64,7 @@ export async function getAllUsers(req: Request, res: Response) {
 
 export async function getUserById(req: Request, res: Response) {
   try {
-    const { userId } = z.object({ userId: z.string() }).parse(req.params);
-
+    const { userId } = req.params;
     const data = await services.findById(userId);
 
     if (!data) {
@@ -92,7 +91,6 @@ export async function getUserById(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-
     const body = updateBody.parse(req.body);
 
     if (!Object.keys(body).length) {
@@ -119,8 +117,28 @@ export async function updateUser(req: Request, res: Response) {
       },
     });
   }
-} 
+}
 
 export async function deleteUser(req: Request, res: Response) {
-  
+  try {
+    const { userId } = req.params;
+    const result = await services.deleteUser(userId);
+
+    if (!result.deletedCount) throw new Error();
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: null,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
 }
