@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createUser,
+  deleteUser,
   getAllUsers,
   getUserById,
   updateUser,
@@ -12,5 +13,6 @@ router.post('/', createUser);
 router.get('/', getAllUsers);
 router.get('/:userId', getUserById);
 router.put('/:userId', updateUser);
+router.delete('/:userId', deleteUser);
 
 export const userRoutes = router;

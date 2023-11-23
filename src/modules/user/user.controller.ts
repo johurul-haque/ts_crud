@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { userSchema } from './user.interface';
+import { updateBody, userSchema } from './user.interface';
 import * as services from './user.service';
 
 export async function createUser(req: Request, res: Response) {
@@ -15,11 +15,24 @@ export async function createUser(req: Request, res: Response) {
       data,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Something went wrong',
-      error,
-    });
+    if (error instanceof Error) {
+      res.status(409).json({
+        success: false,
+        message: error.message,
+      });
+    } else if (error instanceof z.ZodError) {
+      res.status(422).json({
+        success: false,
+        message: error.message,
+        error: error.issues,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+        error,
+      });
+    }
   }
 }
 
@@ -27,16 +40,24 @@ export async function getAllUsers(req: Request, res: Response) {
   try {
     const data = await services.retrieve();
 
-    res.status(200).json({
-      success: true,
-      message: 'Users fetched successfully!',
-      data,
-    });
+    if (data.length) {
+      res.status(200).json({
+        success: true,
+        message: 'Users fetched successfully!',
+        data,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'No users found!',
+        data: null,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong',
-      error,
+      message: 'Internal server error',
+      error: null,
     });
   }
 }
@@ -72,7 +93,7 @@ export async function updateUser(req: Request, res: Response) {
   try {
     const { userId } = req.params;
 
-    const body = userSchema.partial().parse(req.body);
+    const body = updateBody.parse(req.body);
 
     if (!Object.keys(body).length) {
       res.status(400).json({
@@ -99,3 +120,7 @@ export async function updateUser(req: Request, res: Response) {
     });
   }
 } 
+
+export async function deleteUser(req: Request, res: Response) {
+  
+}

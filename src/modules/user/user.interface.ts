@@ -29,5 +29,5 @@ export const userSchema = z.object({
 
 export type TUser = z.infer<typeof userSchema>;
 
-const updateBody = userSchema.partial();
+export const updateBody = userSchema.partial().omit({ password: true });
 export type TUpdateBody = z.infer<typeof updateBody>;

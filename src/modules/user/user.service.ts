@@ -5,7 +5,7 @@ export async function create(user: TUser): Promise<Omit<TUser, 'password'>> {
   const isExisting = await User.findOne({ userId: user.userId });
 
   if (isExisting) {
-    throw new Error(`User ${user.userId} already exists`);
+    throw new Error(`Conflict: User ${user.userId} already exists`);
   }
 
   return await User.create(user);
@@ -20,9 +20,11 @@ export async function findById(userId: string) {
 }
 
 export async function update(userId: string, data: TUpdateBody) {
-  const result = await User.updateOne({ userId }, data);
+  const result = await User.findOneAndUpdate({ userId }, data, {
+    returnOriginal: false,
+  });
 
-  if (!result.matchedCount) throw new Error('Why?');
+  if (!result) throw new Error();
 
   return result;
 }

@@ -49,9 +49,8 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.post('save', async function (doc, next) {
-  doc.password = '';
-  next();
+userSchema.set('toJSON', {
+  transform: (doc, { __v, password, ...rest }) => rest,
 });
 
 export const User = model<TUser>('user', userSchema);
