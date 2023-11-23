@@ -28,3 +28,6 @@ export const userSchema = z.object({
 });
 
 export type TUser = z.infer<typeof userSchema>;
+
+const updateBody = userSchema.partial();
+export type TUpdateBody = z.infer<typeof updateBody>;

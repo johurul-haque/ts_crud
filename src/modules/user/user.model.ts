@@ -25,15 +25,18 @@ const userSchema = new Schema<TUser>({
     },
   },
   hobbies: [{ type: String, required: true }],
-  orders: [
-    {
-      type: {
-        productName: { type: String, required: true },
-        price: { type: Number, required: true },
-        quantity: { type: Number, required: true },
+  orders: {
+    type: [
+      {
+        type: {
+          productName: { type: String, required: true },
+          price: { type: Number, required: true },
+          quantity: { type: Number, required: true },
+        },
       },
-    },
-  ],
+    ],
+    default: undefined,
+  },
   isActive: { type: Boolean, required: true },
 });
 
