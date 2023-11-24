@@ -22,9 +22,6 @@ export async function update(userId: string, payload: UserPayload) {
   return result;
 }
 
-export async function deleteUser(userId: string) {
-  return await UserModel.deleteOne({ userId });
-}
 
 export async function getOrders(userId: string) {
   return await UserModel.findOne({ userId }, { orders: 1, _id: 0 });
@@ -42,4 +39,19 @@ export async function updateOrders(userId: string, payload: OrdersPayload) {
       returnOriginal: false,
     }
   );
+}
+
+export async function getOrdersTotalPrice(userId: string) {
+  const user = await UserModel.findOne({ userId });
+
+  if (!user) throw new Error();
+
+  return user.orders?.reduce(
+    (total, order) => total + order.price * order.quantity,
+    0
+  );
+}
+
+export async function deleteUser(userId: string) {
+  return await UserModel.deleteOne({ userId });
 }
