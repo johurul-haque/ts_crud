@@ -12,6 +12,7 @@ const userSchema = new Schema<User>({
       firstName: { type: String, required: true },
       lastName: { type: String, required: true },
     },
+    _id: false,
   },
   age: { type: Number, required: true },
   email: { type: String, required: true },
@@ -23,6 +24,7 @@ const userSchema = new Schema<User>({
       city: { type: String, required: true },
       country: { type: String, required: true },
     },
+    _id: false,
   },
   hobbies: [{ type: String, required: true }],
   orders: {
@@ -36,6 +38,7 @@ const userSchema = new Schema<User>({
       },
     ],
     default: undefined,
+    _id: false,
   },
   isActive: { type: Boolean, required: true },
 });
@@ -49,8 +52,9 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// preventing unwanted fields from being sent with the response
 userSchema.set('toJSON', {
-  transform: (doc, { __v, password, ...rest }) => rest,
+  transform: (doc, { _id, password, __v, ...rest }) => rest,
 });
 
 export const UserModel = model<User>('user', userSchema);

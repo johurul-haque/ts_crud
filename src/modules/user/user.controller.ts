@@ -18,19 +18,28 @@ export async function createUser(req: Request, res: Response) {
       res.status(422).json({
         success: false,
         message: 'Request body is invalid',
-        error: error.issues,
+        error: {
+          code: 422,
+          issues: error.issues,
+        },
       });
     } else if (error instanceof Error) {
       res.status(409).json({
         success: false,
         message: 'User already exists',
-        error: error.message,
+        error: {
+          code: 409,
+          description: error.message,
+        },
       });
     } else {
       res.status(500).json({
         success: false,
         message: 'Something went wrong',
-        error,
+        error: {
+          code: 500,
+          description: null,
+        },
       });
     }
   }
@@ -210,7 +219,7 @@ export async function getUserOrdersTotalPrice(req: Request, res: Response) {
       success: true,
       message: 'Total price calculated successfully!',
       data: {
-        totalPrice,
+        totalPrice: totalPrice || 0,
       },
     });
   } catch (error) {

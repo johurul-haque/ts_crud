@@ -1,7 +1,7 @@
 import { OrdersPayload, User, UserPayload } from './user.interface';
 import { UserModel } from './user.model';
 
-export async function create(user: User): Promise<Omit<User, 'password'>> {
+export async function create(user: User) {
   return await UserModel.create(user);
 }
 
@@ -18,10 +18,10 @@ export async function update(userId: string, payload: UserPayload) {
     returnOriginal: false,
   });
 
-  if (!result) throw new Error();
+  if (!result) throw new Error('No user found');
+
   return result;
 }
-
 
 export async function getOrders(userId: string) {
   return await UserModel.findOne({ userId }, { orders: 1, _id: 0 });
@@ -44,7 +44,7 @@ export async function updateOrders(userId: string, payload: OrdersPayload) {
 export async function getOrdersTotalPrice(userId: string) {
   const user = await UserModel.findOne({ userId });
 
-  if (!user) throw new Error();
+  if (!user) throw new Error('No user found');
 
   return user.orders?.reduce(
     (total, order) => total + order.price * order.quantity,
