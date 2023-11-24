@@ -27,7 +27,16 @@ export const userSchema = z.object({
     .optional(),
 });
 
-export type TUser = z.infer<typeof userSchema>;
+export const updateUserPayload = userSchema
+  .partial()
+  .omit({ password: true, userId: true, username: true });
 
-export const updateBody = userSchema.partial().omit({ password: true });
-export type TUpdateBody = z.infer<typeof updateBody>;
+export const ordersPayload = z.object({
+  productName: z.string(),
+  price: z.number(),
+  quantity: z.number(),
+});
+
+export type User = z.infer<typeof userSchema>;
+export type UserPayload = z.infer<typeof updateUserPayload>;
+export type OrdersPayload = z.infer<typeof ordersPayload>; 

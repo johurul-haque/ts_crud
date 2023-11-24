@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { TUser } from './user.interface';
+import { User } from './user.interface';
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<User>({
   userId: { type: Number, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   fullName: {
@@ -53,4 +53,4 @@ userSchema.set('toJSON', {
   transform: (doc, { __v, password, ...rest }) => rest,
 });
 
-export const User = model<TUser>('user', userSchema);
+export const UserModel = model<User>('user', userSchema);

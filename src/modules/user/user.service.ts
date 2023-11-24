@@ -1,36 +1,45 @@
-import { TUpdateBody, TUser } from './user.interface';
-import { User } from './user.model';
+import { OrdersPayload, User, UserPayload } from './user.interface';
+import { UserModel } from './user.model';
 
-export async function create(user: TUser): Promise<Omit<TUser, 'password'>> {
-  // const isExisting = await User.findOne({
-  //   userId: user.userId,
-  // });
-
-  // if (isExisting) {
-  //   throw new Error(`Conflict: User ${user.userId} already exists`);
-  // }
-
-  return await User.create(user);
+export async function create(user: User): Promise<Omit<User, 'password'>> {
+  return await UserModel.create(user);
 }
 
 export async function retrieve() {
-  return User.find();
+  return UserModel.find();
 }
 
 export async function findById(userId: string) {
-  return await User.findOne({ userId });
+  return await UserModel.findOne({ userId });
 }
 
-export async function update(userId: string, data: TUpdateBody) {
-  const result = await User.findOneAndUpdate({ userId }, data, {
+export async function update(userId: string, payload: UserPayload) {
+  const result = await UserModel.findOneAndUpdate({ userId }, payload, {
     returnOriginal: false,
   });
 
   if (!result) throw new Error();
-
   return result;
 }
 
 export async function deleteUser(userId: string) {
-  return await User.deleteOne({ userId });
+  return await UserModel.deleteOne({ userId });
+}
+
+export async function getOrders(userId: string) {
+  return await UserModel.findOne({ userId }, { orders: 1, _id: 0 });
+}
+
+export async function updateOrders(userId: string, payload: OrdersPayload) {
+  return await UserModel.findOneAndUpdate(
+    { userId },
+    {
+      $push: {
+        orders: payload,
+      },
+    },
+    {
+      returnOriginal: false,
+    }
+  );
 }

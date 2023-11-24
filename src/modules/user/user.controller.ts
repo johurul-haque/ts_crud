@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
-import { updateBody, userSchema } from './user.interface';
+import { ZodError } from 'zod';
+import { ordersPayload, updateUserPayload, userSchema } from './user.interface';
 import * as services from './user.service';
 
 export async function createUser(req: Request, res: Response) {
@@ -14,10 +14,10 @@ export async function createUser(req: Request, res: Response) {
       data,
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof ZodError) {
       res.status(422).json({
         success: false,
-        message: JSON.parse(error.message),
+        message: 'Request body is invalid',
         error: error.issues,
       });
     } else if (error instanceof Error) {
@@ -91,12 +91,12 @@ export async function getUserById(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-    const body = updateBody.parse(req.body);
+    const body = updateUserPayload.parse(req.body);
 
     if (!Object.keys(body).length) {
       res.status(400).json({
         success: false,
-        message: 'Valid request body is required',
+        message: 'Request body is not valid',
       });
     } else {
       const result = await services.update(userId, body);
@@ -108,14 +108,95 @@ export async function updateUser(req: Request, res: Response) {
       });
     }
   } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 404,
-        description: 'User not found!',
-      },
+    if (error instanceof ZodError) {
+      res.status(422).json({
+        success: false,
+        message: 'Request body is invalid',
+        error: error.issues,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  }
+}
+
+export async function getUserOrders(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+
+    const data = await services.getOrders(userId);
+
+    // If no user is found data will be null
+    if (!data) throw new Error();
+
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data,
     });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: {
+          code: 500,
+          description: 'Internal server error',
+        },
+      });
+    }
+  }
+}
+
+export async function updateUserOrders(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+    const payload = ordersPayload.parse(req.body);
+    const result = await services.updateOrders(userId, payload);
+
+    if (!result) throw new Error();
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: {
+          code: 500,
+          description: 'Internal server error',
+        },
+      });
+    }
   }
 }
 
