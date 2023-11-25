@@ -125,7 +125,6 @@ type User = {
     "message": "Users fetched successfully!",
     "data": [
         {
-            "userId": 2003,
             "username": "johurul_haque",
             "fullName": {
                 "firstName": "Johurul",
@@ -133,23 +132,18 @@ type User = {
             },
             "age": 20,
             "email": "johurul@nno.org",
-            "hobbies": [
-                "YouTube",
-                "Coding"
-            ],
             "address": {
                 "street": "Bolbo na",
                 "city": "Faridpur",
                 "country": "Bangladesh"
             },
-            "isActive": true
         } 
         // more...
     ]
   }
   ```
 
-### Get user by userId
+### Get specific user
 - **GET** - `/api/users/{userId}`
 - **Response** 
   

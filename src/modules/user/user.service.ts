@@ -6,7 +6,10 @@ export async function create(user: User) {
 }
 
 export async function retrieve() {
-  return UserModel.find();
+  return UserModel.find(
+    {},
+    { username: 1, fullName: 1, age: 1, email: 1, address: 1 }
+  );
 }
 
 export async function findById(userId: string) {
