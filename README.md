@@ -44,13 +44,13 @@ This command will run the compiled JavaScript located in the `dist` directory us
 │   └── app.ts // Default exports the `app` from express for routing.  
 ├── config
 │   └── index.ts // Default exports environment variables
-│   ├── modules
-│   │   ├── user
-│   │   │   ├── user.interface.ts
-│   │   │   ├── user.route.ts
-│   │   │   ├── user.controller.ts
-│   │   │   ├── user.model.ts
-│   │   │   ├── user.service.ts
+├── modules
+│   ├── user
+│   │   ├── user.interface.ts
+│   │   ├── user.route.ts
+│   │   ├── user.controller.ts
+│   │   ├── user.model.ts
+│   │   └── user.service.ts
 ├── .env
 ├── .gitignore
 ├── package.json
