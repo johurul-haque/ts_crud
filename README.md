@@ -220,6 +220,7 @@ type User = {
 ### Get the total price of orders for a user
 - **GET** - `/api/users/{userId}/orders/total-price`
 - **Response**
+  
   ```json
   {
     "success": true,
