@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { ordersPayload, updateUserPayload, userSchema } from './user.interface';
-import * as services from './user.service';
+import * as userService from './user.service';
 
 export async function createUser(req: Request, res: Response) {
   try {
-    const user = userSchema.parse(req.body);
-    const data = await services.create(user);
+    const data = userSchema.parse(req.body);
+    const result = await userService.create(data);
 
     res.status(200).json({
       success: true,
       message: 'User created successfully!',
-      data,
+      data: result,
     });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -38,7 +38,7 @@ export async function createUser(req: Request, res: Response) {
         message: 'Something went wrong',
         error: {
           code: 500,
-          description: null,
+          description: 'Something went wrong',
         },
       });
     }
@@ -47,26 +47,32 @@ export async function createUser(req: Request, res: Response) {
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
-    const data = await services.retrieve();
+    const result = await userService.retrieve();
 
-    if (data.length) {
+    if (result.length) {
       res.status(200).json({
         success: true,
         message: 'Users fetched successfully!',
-        data,
+        data: result,
       });
     } else {
       res.status(404).json({
         success: false,
-        message: 'No users found!',
-        data: null,
+        message: 'No user found',
+        error: {
+          code: 404,
+          description: 'No user found',
+        },
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
-      error: null,
+      message: 'Something went wrong',
+      error: {
+        code: 500,
+        description: 'Something went wrong',
+      },
     });
   }
 }
@@ -74,15 +80,15 @@ export async function getAllUsers(req: Request, res: Response) {
 export async function getUserById(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-    const data = await services.findById(userId);
+    const result = await userService.findById(userId);
 
-    if (!data) {
+    if (!result) {
       throw new Error();
     } else {
       res.status(200).json({
         success: true,
         message: 'User fetched successfully!',
-        data,
+        data: result,
       });
     }
   } catch (error) {
@@ -100,15 +106,19 @@ export async function getUserById(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-    const body = updateUserPayload.parse(req.body);
+    const data = updateUserPayload.parse(req.body);
 
-    if (!Object.keys(body).length) {
+    if (!Object.keys(data).length) {
       res.status(400).json({
         success: false,
-        message: 'Request body is not valid',
+        message: 'Request body is invalid',
+        error: {
+          code: 400,
+          description: 'Request body is invalid',
+        },
       });
     } else {
-      const result = await services.update(userId, body);
+      const result = await userService.update(userId, data);
 
       res.status(200).json({
         success: true,
@@ -121,7 +131,10 @@ export async function updateUser(req: Request, res: Response) {
       res.status(422).json({
         success: false,
         message: 'Request body is invalid',
-        error: error.issues,
+        error: {
+          code: 422,
+          issues: error.issues,
+        },
       });
     } else {
       res.status(404).json({
@@ -140,15 +153,15 @@ export async function getUserOrders(req: Request, res: Response) {
   try {
     const { userId } = req.params;
 
-    const data = await services.getOrders(userId);
+    const result = await userService.getOrders(userId);
 
     // If no user is found data will be null
-    if (!data) throw new Error();
+    if (!result) throw new Error();
 
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      data,
+      data: result,
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -176,8 +189,8 @@ export async function getUserOrders(req: Request, res: Response) {
 export async function updateUserOrders(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-    const payload = ordersPayload.parse(req.body);
-    const result = await services.updateOrders(userId, payload);
+    const data = ordersPayload.parse(req.body);
+    const result = await userService.updateOrders(userId, data);
 
     if (!result) throw new Error();
 
@@ -212,8 +225,7 @@ export async function updateUserOrders(req: Request, res: Response) {
 export async function getUserOrdersTotalPrice(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-
-    const totalPrice = await services.getOrdersTotalPrice(userId);
+    const totalPrice = await userService.getOrdersTotalPrice(userId);
 
     res.status(200).json({
       success: true,
@@ -248,7 +260,7 @@ export async function getUserOrdersTotalPrice(req: Request, res: Response) {
 export async function deleteUser(req: Request, res: Response) {
   try {
     const { userId } = req.params;
-    const result = await services.deleteUser(userId);
+    const result = await userService.deleteUser(userId);
 
     if (!result.deletedCount) throw new Error();
 

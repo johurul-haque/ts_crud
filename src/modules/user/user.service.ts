@@ -13,7 +13,7 @@ export async function retrieve() {
 }
 
 export async function findById(userId: string) {
-  return await UserModel.findOne({ userId });
+  return await UserModel.findOne({ userId }, { orders: 0 });
 }
 
 export async function update(userId: string, payload: UserPayload) {
