@@ -58,7 +58,7 @@ This command will run the compiled JavaScript located in the `dist` directory us
 └── tsconfig.json
 ```
 ## User type
-This is how a user is being stored in database.
+This is how a user is stored in the database.
 
 ```ts
 type User = {
@@ -88,14 +88,14 @@ type User = {
 
 ## API endpoints
 
-### Create new user
+### Create a new user
 - **POST** - `/api/users`
 - JSON Payload
   
   ```json
   {
-    "userId": 2003,
-    "username": "johurul_haque",
+    "userId": 2023, // Unique and the first digit can't be 0
+    "username": "johurul_haque", // Unique
     "password": "hello_JS_1997",
     "fullName": {
         "firstName": "Johurul",
@@ -198,7 +198,7 @@ type User = {
     "quantity": 1
   }
   ```
-### Get all orders done by user
+### Get all orders done by a user
 - **GET** - `/api/users/{userId}/orders`
 - **Response**
   
@@ -223,7 +223,7 @@ type User = {
   }
   ```
 
-### Get the total-price of orders for a user
+### Get the total price of orders for a user
 - **GET** - `/api/users/{userId}/orders/total-price`
 - **Response**
   ```json
