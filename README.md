@@ -1,16 +1,16 @@
 # Overview
-A REST API project for managing user data. It was built using the following tools
+A REST API project for managing user data. It was built using the following tools:
 - **Express** - For handling requests and responses.
 - **TypeScript** - For type safety.
-- **Zod** - Parsing incoming payloads and infering types.
+- **Zod** - Parsing incoming payloads and inferring types.
 - **Mongoose & MongoDB** - For data modeling and storing.
 
-It adheres the modular pattern for structuring the application. More on app structure is described in later section.
+It adheres to the modular pattern for structuring the application. More on app structure is described in the later section.
 
 ## Getting started
 After installing all the dependencies using `npm install` create a `.env` file in the root of this project. It should contain the following variables:
 
-```
+```ini
 MONGODB_URI=mongodb+srv...
 BCRYPT_SALT_ROUNDS=10 // Optional, a fallback is set to 8.
 PORT=8080 // Optional, a fallback is set to 8080.
@@ -38,7 +38,7 @@ This command will run the compiled JavaScript located in the `dist` directory us
 
 ## App structure
 
-```js
+```
 ├── src
 │   ├── server.ts // Main entry point for the application.
 │   └── app.ts // Default exports the `app` from express for routing.  
