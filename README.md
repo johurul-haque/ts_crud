@@ -38,39 +38,23 @@ This command will run the compiled JavaScript located in the `dist` directory us
 
 ## App structure
 
-```
+```json
 ├── src
-
 │   ├── server.ts // Main entry point for the application.
-
-│   └── app.ts // Default exports the `app` from express for routing
-
+│   └── app.ts // Default exports the `app` from express for routing.  
 ├── config
-
 │   └── index.ts // Default exports environment variables
-
 │   ├── modules
-
 │   │   ├── user
-
 │   │   │   ├── user.interface.ts
-
 │   │   │   ├── user.route.ts
-
 │   │   │   ├── user.controller.ts
-
 │   │   │   ├── user.model.ts
-
 │   │   │   ├── user.service.ts
-
 ├── .env
-
 ├── .gitignore
-
 ├── package.json
-
 ├── vercel.json
-
 └── tsconfig.json
 ```
 ## User type
