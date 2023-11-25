@@ -229,7 +229,9 @@ export async function getUserOrdersTotalPrice(req: Request, res: Response) {
 
     res.status(200).json({
       success: true,
-      message: 'Total price calculated successfully!',
+      message: totalPrice
+        ? 'Total price calculated successfully!'
+        : "Hasn't made any orders yet!",
       data: {
         totalPrice: totalPrice || 0,
       },
