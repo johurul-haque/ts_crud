@@ -38,7 +38,7 @@ This command will run the compiled JavaScript located in the `dist` directory us
 
 ## App structure
 
-```json
+```js
 ├── src
 │   ├── server.ts // Main entry point for the application.
 │   └── app.ts // Default exports the `app` from express for routing.  
