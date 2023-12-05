@@ -8,33 +8,25 @@ A REST API project for managing user data. It was built using the following tool
 It adheres to the modular pattern for structuring the application. More on app structure is described in the later section.
 
 ## Getting started
-After installing all the dependencies using `npm install` create a `.env` file in the root of this project. It should contain the following variables:
+After installing create a `.env` file in the root of this project. It should contain the following variables:
 
 ```ini
-MONGODB_URI=mongodb+srv...
-BCRYPT_SALT_ROUNDS=10 // Optional, a fallback is set to 8.
-PORT=8080 // Optional, a fallback is set to 8080.
+MONGODB_URI = mongodb+srv://...
+BCRYPT_SALT_ROUNDS = 10 # Fallback is set to 8.
+PORT = 8080 # Fallback is set to 8080.
 ```
-### Dev server
-1. Start the application in development using
+
+### Running the application
+   ```bash
+   # development
+   $ npm run dev
+
+   # production build
+   $ npm run build
+
+   # running in production
+   $ npm run start
    ```
-   npm run dev
-   ```
-   This will launch the server using `ts-node-dev`, which automatically restarts on file changes.
-
-2. Open your browser and navigate to `http://localhost:YOUR_PORT` to access the application. Replace YOUR_PORT with the port specified in the `.env` file.
-
-### Production build
-```
-npm run build
-```
-This command transpiles TypeScript files into JavaScript in the dist directory.
-
-### Running in production
-```
-npm start
-```
-This command will run the compiled JavaScript located in the `dist` directory using `node`.
 
 ## App structure
 
@@ -57,6 +49,7 @@ This command will run the compiled JavaScript located in the `dist` directory us
 ├── vercel.json
 └── tsconfig.json
 ```
+
 ## User type
 This is how a user is stored in the database.
 
@@ -175,7 +168,7 @@ type User = {
     ```
 
 ### Update user
-> ⚠️ Don't update the `order` field using this route. This would overwrite the field with new data and we don't want that. Instead use `/api/users/{userId}/orders`
+> ⚠️ Don't update the `order` field using this route. This would overwrite the field with new data and we don't want that. Instead, use `/api/users/{userId}/orders`
 
 - **PUT** - `/api/users/{userId}`
 
