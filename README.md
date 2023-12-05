@@ -3,7 +3,7 @@ A REST API project for managing user data. It was built using the following tool
 - **Express** - For handling requests and responses.
 - **TypeScript** - For type safety.
 - **Zod** - Parsing incoming payloads and inferring types.
-- **Mongoose & MongoDB** - For data modeling and storing.
+- **Mongoose** - For data modeling and facilitating data transmission with MongoDB.
 
 It adheres to the modular pattern for structuring the application. More on app structure is described in the later section.
 
