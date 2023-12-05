@@ -30,12 +30,12 @@ PORT = 8080 # Fallback is set to 8080.
 
 ## App structure
 
-```
+```bash
 ├── src
-│   ├── server.ts // Main entry point for the application.
-│   └── app.ts // Default exports the `app` from express for routing.  
+│   ├── server.ts # Main entry point for the application.
+│   └── app.ts # Default exports the `app` from express for routing.  
 ├── config
-│   └── index.ts // Default exports environment variables
+│   └── index.ts # Default exports environment variables
 ├── modules
 │   ├── user
 │   │   ├── user.interface.ts
