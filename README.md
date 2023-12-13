@@ -11,9 +11,9 @@ It adheres to the modular pattern for structuring the application. More on app s
 After installing create a `.env` file in the root of this project. It should contain the following variables:
 
 ```ini
-MONGODB_URI = mongodb+srv://...
-BCRYPT_SALT_ROUNDS = 10 # Fallback is set to 8.
-PORT = 8080 # Fallback is set to 8080.
+MONGODB_URI=mongodb+srv://...
+BCRYPT_SALT_ROUNDS=10 # Fallback is set to 8.
+PORT=8080 # Fallback is set to 8080.
 ```
 
 ### Running the application
